@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/gsap.min.js"></script>
+    <title>Cursor Effect</title>
+    <style>
+        body {
+            background: black;
+        }
+
+        .cursor {
+            position: absolute;
+            z-index: 1;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+            background: white;
+            transform: scale(.8);
+            transition: .5s cubic-bezier(.75, -1.27, .3, 2.33) transform, .2s cubic-bezier(.75, -1.27, .3, 2.33) opacity;
+        }
+
+        .follower {
+            position: absolute;
+            z-index: 1;
+            width: 60px;
+            height: 60px;
+            background: rgb(255, 255, 255, .13);
+            border-radius: 100%;
+            transform: translate(4px, 4px);
+            transition: .5s cubic-bezier(.75, -1.27, .3, 2.33) transform, .2s cubic-bezier(.75, -1.27, .3, 2.33) opacity;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor"></div>
+    <div class="follower"></div>
+
+    <script>
+        $(document).ready(function () {
+            let posX = 0;
+            let posY = 0;
+            let mousePosX = 0;
+            let mousePosY = 0;
+
+            let follower = $('.follower');
+            let cursor = $('.cursor');
+
+            TweenMax.to({}, .016, {
+                repeat: -1,
+                onRepeat: function () {
+                    posX = posX + (mousePosX - posX) / 9;
+                    posY = posY + (mousePosY - posY) / 9;
+                    TweenMax.set(follower, {
+                        css: {
+                            left: posX - 20,
+                            top: posY - 20
+                        }
+                    })
+                    TweenMax.set(cursor, {
+                        css: {
+                            left: mousePosX,
+                            top: mousePosY
+                        }
+                    })
+                }
+            })
+
+            $(document).on("mousemove", function (e) {
+                mousePosX = e.pageX;
+                mousePosY = e.pageY;
+            })
+        })
+    </script>
+</body>
+
+</html>
